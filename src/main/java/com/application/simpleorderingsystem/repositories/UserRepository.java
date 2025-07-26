@@ -1,4 +1,7 @@
-package com.application.simpleorderingsystem.repository;
+package com.application.simpleorderingsystem.repositories;
 
-public class UserRepository {
+import com.application.simpleorderingsystem.entities.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<User, Long> {
 }
