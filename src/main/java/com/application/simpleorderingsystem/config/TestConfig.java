@@ -1,8 +1,10 @@
 package com.application.simpleorderingsystem.config;
 
+import com.application.simpleorderingsystem.entities.Category;
 import com.application.simpleorderingsystem.entities.Order;
 import com.application.simpleorderingsystem.entities.User;
 import com.application.simpleorderingsystem.entities.enums.OrderStatus;
+import com.application.simpleorderingsystem.repositories.CategoryRepository;
 import com.application.simpleorderingsystem.repositories.OrderRepository;
 import com.application.simpleorderingsystem.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
 
     @Override
     public void run(String... args) throws Exception {
@@ -31,8 +36,12 @@ public class TestConfig implements CommandLineRunner {
         Order order1 = new Order(null, Instant.parse("2025-01-01T19:53:07Z"), OrderStatus.WAITING_PAYMENT, user1);
         Order order2 = new Order(null, Instant.parse("2025-02-01T03:42:10Z"), OrderStatus.SHIPPED, user2);
         Order order3 = new Order(null, Instant.parse("2025-03-01T09:42:10Z"), OrderStatus.CANCELED, user1);
+        Category category1 = new Category(null, "Eletronics");
+        Category category2 = new Category(null, "Tools");
 
         userRepository.saveAll(Arrays.asList(user1, user2));
         orderRepository.saveAll(Arrays.asList(order1, order2, order3));
+        categoryRepository.saveAll(Arrays.asList(category1, category2));
+
     }
 }

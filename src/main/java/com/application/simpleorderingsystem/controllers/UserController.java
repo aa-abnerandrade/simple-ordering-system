@@ -20,7 +20,7 @@ public class UserController {
 
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
+    public ResponseEntity<List<User>> findAllUsers() {
         // Logic to retrieve all users
         //User newUser = new User(1L, "John Doe", "john@email.com", "1234567890", "password123");
         List<User> listAllUsers = userService.findAll();
@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> findAllUsers(@PathVariable Long id) {
+    public ResponseEntity<User> findUserById(@PathVariable Long id) {
         User user = userService.findById(id);
         return ResponseEntity.ok().body(user);
     }
