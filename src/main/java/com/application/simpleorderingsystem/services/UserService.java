@@ -26,5 +26,26 @@ public class UserService {
         return resUser.get();
     }
 
+    public User insert(User user) {
+        return userRepository.save(user);
+    }
+
+    public void deleteById(Long id) {
+        User resUser = findById(id);
+        userRepository.deleteById(resUser.getId());
+    }
+
+    public User updateById(Long id, User updatedUser) {
+        User refUser = userRepository.getReferenceById(id);
+        updateData(refUser, updatedUser);
+        return userRepository.save(updatedUser);
+    }
+
+    private void updateData(User oldUser, User newUser) {
+        oldUser.setName(newUser.getName());
+        oldUser.setEmail(newUser.getEmail());
+        oldUser.setPhone(newUser.getPhone());
+    }
+
 
 }
