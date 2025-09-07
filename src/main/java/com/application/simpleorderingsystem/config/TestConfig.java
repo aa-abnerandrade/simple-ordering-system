@@ -1,14 +1,8 @@
 package com.application.simpleorderingsystem.config;
 
-import com.application.simpleorderingsystem.entities.Category;
-import com.application.simpleorderingsystem.entities.Order;
-import com.application.simpleorderingsystem.entities.Product;
-import com.application.simpleorderingsystem.entities.User;
+import com.application.simpleorderingsystem.entities.*;
 import com.application.simpleorderingsystem.entities.enums.OrderStatus;
-import com.application.simpleorderingsystem.repositories.CategoryRepository;
-import com.application.simpleorderingsystem.repositories.OrderRepository;
-import com.application.simpleorderingsystem.repositories.ProductRepository;
-import com.application.simpleorderingsystem.repositories.UserRepository;
+import com.application.simpleorderingsystem.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +26,9 @@ public class TestConfig implements CommandLineRunner {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
 
     @Override
@@ -64,5 +61,11 @@ public class TestConfig implements CommandLineRunner {
         productRepository.saveAll(Arrays.asList(product1, product2, product3, product4, product5));
 
         //category1.getProducts().addAll(Arrays.asList(product1, product2));
+
+        OrderItem oi1 = new OrderItem(order1, product1, 2, product1.getPrice());
+        OrderItem oi2 = new OrderItem(order1, product3, 1, product3.getPrice());
+        OrderItem oi3 = new OrderItem(order2, product3, 2, product3.getPrice());
+        OrderItem oi4 = new OrderItem(order3, product5, 2, product5.getPrice());
+        orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
     }
 }
