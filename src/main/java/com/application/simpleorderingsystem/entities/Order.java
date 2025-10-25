@@ -3,6 +3,8 @@ package com.application.simpleorderingsystem.entities;
 import com.application.simpleorderingsystem.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -14,100 +16,74 @@ import java.util.Set;
 @Table(name = "tb_orders")
 public class Order implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Getter
+	@Setter
+	private Long id;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private Instant moment;
+	@Getter
+	@Setter
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
+	private Instant moment;
 
-    private Integer orderStatus;
+	private Integer orderStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id")
-    private User client;
+	@Getter
+	@Setter
+	@ManyToOne
+	@JoinColumn(name = "client_id")
+	private User client;
 
-    @OneToMany(mappedBy = "id.order")
-    private Set<OrderItem> items = new HashSet<>();
+	@OneToMany(mappedBy = "id.order")
+	@Getter
+	private Set<OrderItem> items = new HashSet<>();
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
-    private Payment payment;
-
-
-    public Order() {
-    }
-    public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
-        this.id = id;
-        this.moment = moment;
-        setOrderStatus(orderStatus);
-        this.client = client;
-    }
+	@Getter
+	@Setter
+	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+	private Payment payment;
 
 
-    public Long getId() {
-        return id;
-    }
+	public Order() {
+	}
+	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
+		this.id = id;
+		this.moment = moment;
+		setOrderStatus(orderStatus);
+		this.client = client;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public Instant getMoment() {
-        return moment;
-    }
+	public OrderStatus getOrderStatus() {
+		return OrderStatus.valueOf(orderStatus);
+	}
 
-    public void setMoment(Instant moment) {
-        this.moment = moment;
-    }
+	public void setOrderStatus(OrderStatus orderStatus) {
+		if (orderStatus == null) {
+			throw new IllegalArgumentException("Order status cannot be null");
+		}
+		this.orderStatus = orderStatus.getCode();
+	}
 
-    public OrderStatus getOrderStatus() {
-        return OrderStatus.valueOf(orderStatus);
-    }
 
-    public void setOrderStatus(OrderStatus orderStatus) {
-        if (orderStatus == null) {
-            throw new IllegalArgumentException("Order status cannot be null");
-        }
-        this.orderStatus = orderStatus.getCode();
-    }
+	public Double getTotal() {
+		Double sum = 0.0;
+		for (OrderItem item : items) {
+			sum += item.getSubTotal();
+		}
+		return sum;
+	}
 
-    public User getClient() {
-        return client;
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || getClass() != o.getClass()) return false;
+		Order order = (Order) o;
+		return Objects.equals(id, order.id);
+	}
 
-    public void setClient(User client) {
-        this.client = client;
-    }
-
-    public Set<OrderItem> getItems() {
-        return items;
-    }
-
-    public Payment getPayment() {
-        return payment;
-    }
-
-    public void setPayment(Payment payment) {
-        this.payment = payment;
-    }
-
-    public Double getTotal() {
-        Double sum = 0.0;
-        for (OrderItem item : items) {
-            sum += item.getSubTotal();
-        }
-        return sum;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Order order = (Order) o;
-        return Objects.equals(id, order.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(id);
+	}
 }

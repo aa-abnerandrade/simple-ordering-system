@@ -8,7 +8,7 @@ public class SimpleOrderingSystemApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SimpleOrderingSystemApplication.class, args);
-		System.out.println("Oiiiiii");
+		System.out.println("Simple Ordering System");
 	}
 
 }
